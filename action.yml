@@ -1,10 +1,16 @@
-name: Build Writerside docs with docker
+name: Build X docs using Docker
 description: Build Writerside documentation artifacts
-author: writerside <writerside@jetbrains.com>
 branding:
   icon: book-open
   color: purple
-  
+
+inputs:
+  docker-version:
+    description: 'The version of Docker to use'
+    required: false
+    default: '2.1.1279-p3399'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
+
