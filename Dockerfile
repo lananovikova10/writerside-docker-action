@@ -1,21 +1,20 @@
 ARG DOCKER_VERSION=2.1.1279-p3399
 FROM registry.jetbrains.team/p/writerside/builder/writerside-builder:${DOCKER_VERSION}
 
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
+RUN apk add --no-cache \
     curl \
     gnupg \
-    lsb-release
+    tar \
+    xz \
+    && apk add --no-cache --virtual .build-deps \
+    ca-certificates
 
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && \
-    apt-get install -y docker-ce-cli
+RUN curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-20.10.8.tgz | tar xzvf - --strip 1 -C /usr/local/bin docker/docker
 
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
+
 
 
 
